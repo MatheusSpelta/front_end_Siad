@@ -16,7 +16,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import DialogForm from "./dialog-form";
 import api from "@/app/axios/api";
 import { toast } from "./ui/use-toast";
@@ -26,16 +26,6 @@ import { error } from "console";
 //Sobrescrição para utilizar um tipo expecifico de dados
 type SigninForm = z.infer<typeof handleSigninFormSchema>;
 
-type SigninCredentials = SigninForm & {
-    nome: string;
-    telefone: string;
-    email: string;
-    segmento: string;
-    informacao: string;
-    //assumir: number;
-    datahora: string;
-}
-
 
 //Validação de dados com Zod
 const handleSigninFormSchema = z.object({
@@ -44,9 +34,13 @@ const handleSigninFormSchema = z.object({
     email: z.string().min(1, 'Email obrigatório').email('Digite um email, válido.'),
     texto: z.string().min(1, "Texto obrigatorio."),
     segmento: z.string(),
+
+
 })
 
 export default function Form() {
+    const [segmento, setSegmento] = useState('');
+
     const { register, handleSubmit, formState: { errors } } = useForm<SigninCredentials>({
         resolver: zodResolver(handleSigninFormSchema)
     });
@@ -81,6 +75,11 @@ export default function Form() {
 
         }) */
         console.log(data);
+    }
+
+    function handleSegmentoChange(value: string) {
+        setSegmento(value);
+        setSegmento('segmento', value);
     }
 
     return (
@@ -140,7 +139,7 @@ export default function Form() {
                 </div>
                 <div className="w-full">
                     <span>Segmento</span>
-                    <Select {...register('segmento')} >
+                    <Select onValueChange={handleSegmentoChange} >
                         <SelectTrigger>
                             <SelectContent >
                                 <SelectGroup >
