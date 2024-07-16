@@ -32,7 +32,7 @@ const handleSigninFormSchema = z.object({
     nome: z.string().min(1, 'Nome obrigatório'),
     telefone: z.string().min(10, 'Digíte um telefone válido.'),
     email: z.string().min(1, 'Email obrigatório').email('Digite um email, válido.'),
-    texto: z.string().min(1, "Texto obrigatorio."),
+    informacao: z.string().min(1, "Texto obrigatorio."),
     segmento: z.string(),
 
 
@@ -46,7 +46,13 @@ export default function Form() {
     });
 
     async function handleSignin(data: SigninForm) {
-        await api.post("api_addcontato.php?funcao=post_contato", data, {
+        await api.post("/api_addcontato.php?funcao=post_contato", {
+            nome: data.nome,
+            telefone: data.telefone,
+            email: data.email,
+            informacao: data.informacao,
+            assumir: 1
+        }, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer',
@@ -54,7 +60,6 @@ export default function Form() {
             },
         }
         ).then((res) => {
-            console.log(data);
             toast({
                 title: "Link enviado com sucesso!",
                 description: "O link foi armazenado na base de dados.",
@@ -63,7 +68,6 @@ export default function Form() {
 
 
         }).catch((error) => {
-            console.log(data);
             // console.log("Error on server request " + error)
             toast({
                 title: "Erro inesperado!",
@@ -159,7 +163,7 @@ export default function Form() {
                 <div className="w-full">
                     <strong>Como podemos ajudar?</strong>
                     <Textarea
-                        {...register('texto')}
+                        {...register('informacao')}
                     />
                 </div>
 
