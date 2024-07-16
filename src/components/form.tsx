@@ -41,12 +41,12 @@ const handleSigninFormSchema = z.object({
 export default function Form() {
     const [segmento, setSegmento] = useState('');
 
-    const { register, handleSubmit, formState: { errors } } = useForm<SigninCredentials>({
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm<SigninForm>({
         resolver: zodResolver(handleSigninFormSchema)
     });
 
-    async function handleSignin(data: SigninCredentials) {
-        /* await api.post("api_addcontato.php?funcao=post_contato", data, {
+    async function handleSignin(data: SigninForm) {
+        await api.post("api_addcontato.php?funcao=post_contato", data, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer',
@@ -73,13 +73,13 @@ export default function Form() {
             })
 
 
-        }) */
+        })
         console.log(data);
     }
 
     function handleSegmentoChange(value: string) {
         setSegmento(value);
-        setSegmento('segmento', value);
+        setValue('segmento', value);
     }
 
     return (
@@ -141,14 +141,14 @@ export default function Form() {
                     <span>Segmento</span>
                     <Select onValueChange={handleSegmentoChange} >
                         <SelectTrigger>
-                            <SelectContent >
-                                <SelectGroup >
-                                    <SelectItem value="teste1">Teste 1</SelectItem>
-                                    <SelectItem value="teste2">Teste 2</SelectItem>
-                                    <SelectItem value="teste3">Teste 3</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
+                            <SelectValue placeholder="Selecione um segmento" />
                         </SelectTrigger>
+                        <SelectContent >
+                            <SelectItem value="teste1">Teste 1</SelectItem>
+                            <SelectItem value="teste2">Teste 2</SelectItem>
+                            <SelectItem value="teste3">Teste 3</SelectItem>
+                        </SelectContent>
+
                     </Select>
                     {errors.segmento && (
                         <span className="text-red-500">
