@@ -1,3 +1,5 @@
+'use cliente'
+
 import colors from "tailwindcss/colors";
 
 import { Button } from "@/components/ui/button";
@@ -14,12 +16,27 @@ import {
 } from "@/components/ui/dialog"
 import { Search } from "lucide-react"
 import { Input } from "./ui/input"
+import api from "../app/axios/api"
+
+
 
 export default function DialogForm() {
+
+    async function dados() {
+        const resposta = await api.get("/api_contato.php?funcao=get_contato_email&email=teste1@gmail.com", {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer'
+            },
+        });
+        console.log(resposta);
+    }
+
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="w-full bg-primary-graybtn">
+                <Button className="w-full bg-primary-graybtn" onClick={dados}>
                     Receber Dados
                 </Button>
             </DialogTrigger>
@@ -41,12 +58,12 @@ export default function DialogForm() {
                 </DialogHeader>
                 <DialogFooter className="sm:justify-start">
                     <DialogClose asChild>
-                        <Button type="button">
-                            Close
-                        </Button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
+
     )
+
+
 }
